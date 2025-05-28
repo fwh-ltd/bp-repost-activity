@@ -56,6 +56,10 @@ var currentRequest = null;
 					$('#repost-activity-form #posting_at').val('');
           $('#repost-box').hide();
 					$('#rpa_group_id').hide();
+          // Close magnificPopup if it is active.
+          if ($.magnificPopup && $.magnificPopup.instance) {
+            $.magnificPopup.close();
+          }
         }
       });
     },

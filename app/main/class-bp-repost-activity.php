@@ -339,8 +339,13 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			}
 
-			// Check if it's enabled from BuddyPress Settings.
-			if ( '1' !== bp_get_option( '_bprpa_enable_setting', 1 ) ) {
+			// Get option value for settings enabled or not.
+			$option_value = bp_get_option( '_bprpa_enable_setting', 1 );
+			// error_log("_bprpa_enable_setting: " . var_export($option_value, true));
+			// var_dump($option_value); die;
+
+			// If settings is disable, then false.
+			if ( 1 != $option_value ) {
 				return false;
 			}
 
@@ -485,15 +490,15 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function bprpa_repost_button_new() {
 
 			// Bail, if anything goes wrong.
-			if ( ! $this->bprpa_is_activity_strem() ) {
+			if ( ! $this->bprpa_is_activity_strem() || ( function_exists( 'bp_get_activity_type' ) && 'activity_update' !== bp_get_activity_type() && 'rtmedia_update' !== bp_get_activity_type() ) ) {
 				return;
 			}
 
-			// Markup for button.
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			printf(
-				'<div class="generic-button"><a class="button popup-modal-register bp-repost-activity" href="#repost-box" data-activity_id="%d"><span class="bp-screen-reader-text">%s</span><span class="bb-icon-repeat"></span><span class="repost-button">%s</span></a></div>',
-				intval( bp_get_activity_id() ),
-				esc_html__( 'Re-Post', 'bp-repost-activity' ),
+				'<a href="#" class="button item-button bp-secondary-action bp-tooltip bp-repost-activity" data-bp-tooltip="%1$s" data-activity_id="%2$s" aria-pressed="false"><span class="bb-icon-repeat"></span> <span class="repost-button">%3$s</span><span class="bp-screen-reader-text">%3$s</span></a>',
+				esc_attr__( 'Re-post', 'bp-repost-activity' ),
+				esc_attr( bp_get_activity_id() ),
 				esc_html__( 'Re-Post', 'bp-repost-activity' )
 			);
 		}
@@ -635,40 +640,38 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Original activity author.
 			$orig_activity_author = $original_activity->user_id;
 
+			// Get original activity time since.
+			$orig_activity_time_since = bp_core_time_since( $original_activity->date_recorded );
+
+			// Get original activity author details.
+			$orig_activity_author_link = bp_core_get_user_domain( $orig_activity_author );
+			$orig_activity_author_name = bp_core_get_user_displayname( $orig_activity_author );
+
 			ob_start();
-
 			?>
-			<div class="bp-activity-head">
-				<div class="activity-avatar item-avatar">
-					<a href="<?php bp_members_get_user_url( $orig_activity_author ); ?>">
-					<?php
-					bp_activity_avatar(
-						array(
-							'type'    => 'full',
-							'user_id' => $orig_activity_author,
-						)
-					);
-					?>
-					</a>
-				</div>
+			<div class="bbars-repost-content">
+			<?php
+			printf(
+				'<p class="bprpa-repost-info">%1$s <a href="%2$s" class="bp-tooltip" data-bp-tooltip="%3$s">@%3$s</a> - <a href="%4$s" class="bprpa-repost-time">%5$s</a> %6$s</p>',
+				esc_html__( 'Reposted from', 'bp-repost-activity' ),
+				esc_url( $orig_activity_author_link ),
+				esc_html( $orig_activity_author_name ),
+				esc_url( bp_activity_get_permalink( $original_activity_id ) ),
+				esc_html( $orig_activity_time_since ),
+				// translators: Reposted content.
+				sprintf( esc_html__( 'wrote: %s', 'bp-repost-activity' ), '' )
+			);
 
-				<div class="activity-header abc">
-					<?php echo wp_kses_post( $original_activity->action ); ?>
-					<p class="activity-date">
-						<a href="<?php echo esc_url( bp_activity_get_permalink( $original_activity->id ) ); ?>"><?php echo wp_kses_post( bp_core_time_since( $original_activity->date_recorded ) ); ?></a>
-						<?php
-						if ( function_exists( 'bp_nouveau_activity_is_edited' ) ) {
-							bp_nouveau_activity_is_edited( $original_activity->id );
-						}
-						?>
-					</p>
-				</div>
+			$activity_content = $this->bprpa_get_activity( $original_activity_id );
+
+			if ( isset( $activity_content->content ) && ! empty( $activity_content->content ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo apply_filters( 'bp_get_activity_content_body', $activity_content->content, $activity_content );
+			}
+			?>
 			</div>
 			<?php
-
-			$original_content = ob_get_clean();
-
-			$content = '<div class="bbars-repost-content">' . $original_content . $content . '</div>';
+			$content = ob_get_clean();
 
 			return $content;
 		}
