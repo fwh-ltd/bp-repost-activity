@@ -59,6 +59,16 @@ This plugin uses `npm` for managing development dependencies and `@wordpress/scr
 
 The built assets will be placed in the `build/` directory.
 
+**Packaging for Distribution:**
+
+To create a distributable ZIP file of the plugin, which includes only the necessary production files and is named with the current plugin version (e.g., `bp-repost-activity-1.3.2.zip`), run:
+
+```bash
+npm run package
+```
+
+This command first uses `@wordpress/scripts` to bundle the plugin and then renames the resulting ZIP file to include the version from `package.json`. The final ZIP file will be created in the plugin's root directory.
+
 ## Screenshots ##
 
 1.  **Re-post Button:** The "Re-Post" button appears on activity items. (`screenshot-1.jpg`)

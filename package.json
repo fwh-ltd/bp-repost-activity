@@ -6,6 +6,8 @@
   "scripts": {
     "start": "npx wp-scripts start",
     "build": "npx wp-scripts build",
+    "plugin-zip": "npx wp-scripts plugin-zip",
+    "package": "npm run plugin-zip && node -e \"const fs = require('fs'); const pkg = require('./package.json'); fs.renameSync('bp-repost-activity.zip', 'bp-repost-activity-' + pkg.version + '.zip'); console.log('Created: bp-repost-activity-' + pkg.version + '.zip');\"",
     "readme": "grunt readme",
     "i18n": "grunt i18n",
     "minify": "grunt minify"
