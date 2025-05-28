@@ -72,6 +72,9 @@ The built assets will be placed in the `build/` directory.
 
 ## Changelog ##
 
+### 1.3.2 ###
+* Minor docs fixes
+
 ### 1.3.1 ###
 *   **Fix:** Resolved PHP error related to `bp_activity_link_preview` when re-posting.
 *   **Dev:** Updated README with detailed developer setup and build instructions.

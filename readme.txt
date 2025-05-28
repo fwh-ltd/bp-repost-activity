@@ -1,54 +1,93 @@
 === Re-post Activity for BuddyPress ===
-Contributors: bhargavbhandari90
-Donate link: https://www.paypal.me/BnB90/50
-Tags: buddypress, buddyboss, activity, share, re-post
-Requires at least: 4.0
+Contributors: bhargavbhandari90, allenday
+Tags: buddypress, buddyboss, activity, share, re-post, repost
+Requires at least: 4.7
 Tested up to: 6.7.2
-Requires PHP: 5.6
-Stable tag: 1.3.0
+Requires PHP: 7.0
+Stable tag: 1.3.1
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: license.txt
 
-Re-Post an Activity from activity stream. Re-post an activity to your group and personal activity.
+Allows users to easily re-post existing BuddyPress or BuddyBoss Platform activity items to their own profile or to groups they are a member of.
 
 == Description ==
 
-Sometimes people like an activity and they would like to post the same activity to their profile or group.
+Enhance user engagement on your BuddyPress or BuddyBoss community by enabling activity re-posting. Similar to a "retweet" or "share" function on popular social media platforms, this plugin allows users to quickly share interesting activity updates with their followers or group members.
 
-This plugin will fulfill the requirement of re-posting any activity.
+When a user re-posts an activity, the original content is embedded within a new activity item, attributed to the original author and linking back to the original post.
 
-== Compatible with ==
+This plugin aims to be lightweight and seamlessly integrate with the BuddyPress and BuddyBoss Platform experience.
 
-- BuddyPress
-- BuddyBoss
+== Features ==
 
-== How to use? ==
-
-* Click on "Re-Post" button on any activity.
-* Select where to post that activity and post it.
+*   Re-post to Profile: Users can re-post any public activity item to their own activity stream.
+*   Re-post to Groups: Users can re-post activity items to any group they are a member of.
+*   Clear Attribution: Re-posted items clearly show the original author and a link to the original activity.
+*   Modal Interface: A simple pop-up modal allows users to choose where to re-post (profile or a specific group).
+*   BuddyBoss Platform Compatible: Works with both standard BuddyPress and the BuddyBoss Platform.
+*   Admin Setting: Option in BuddyPress settings to enable/disable the re-post functionality site-wide (Path: Settings > BuddyPress > Options).
 
 == Installation ==
-1. Upload "bp-repost-activity" to the "/wp-content/plugins/" directory usong FTP or upload plugin zip using upload button.
-2. Activate the plugin through the "Plugins" menu in WordPress.
+
+1.  Upload the `bp-repost-activity` folder to the `/wp-content/plugins/` directory via FTP, or upload the plugin ZIP file through the 'Plugins > Add New' screen in your WordPress admin area.
+2.  Activate the plugin through the 'Plugins' menu in WordPress.
+3.  Ensure the feature is enabled by navigating to **Settings > BuddyPress > Options** and checking the "Re-Post Activity" setting.
+
+== Developer Setup & Build Process ==
+
+This plugin uses `npm` for managing development dependencies and `@wordpress/scripts` for building assets (JavaScript and CSS).
+
+Prerequisites:
+
+*   Node.js (which includes npm) installed on your development machine.
+
+Building the plugin:
+
+1.  Navigate to the plugin's root directory (`bp-repost-activity`) in your terminal.
+2.  Install the necessary development dependencies:
+    `npm install`
+3.  To build the JavaScript and CSS assets for production, run:
+    `npm run build`
+4.  For development, you can run the following command to watch for changes in source files and automatically rebuild the assets:
+    `npm run start`
+
+The built assets will be placed in the `build/` directory.
 
 == Screenshots ==
-1. Re-post any activity by clicking on the "Re-Post" button screenshot-1.jpg.
-2. Select where to re-post screenshot-2.jpg.
-3. Enable/Disable re-post functionality screenshot-3.
 
+1.  Re-post Button: The "Re-Post" button appears on activity items. (screenshot-1.jpg)
+2.  Re-post Modal: Select where to re-post the activity. (screenshot-2.jpg)
+3.  Admin Setting: Enable/Disable re-post functionality. (screenshot-3.jpg)
 
 == Changelog ==
+
+= 1.3.1 =
+* Fix: Resolved PHP error related to `bp_activity_link_preview` when re-posting.
+* Dev: Updated README with detailed developer setup and build instructions.
+* Dev: Added `LICENSE` file (GPLv2 or later).
+* Dev: Cleaned up plugin header in `README.md`.
+* Dev: Resolved numerous JavaScript build dependencies.
+* Fix: Ensured BuddyBoss modal (Magnific Popup) closes automatically after successful repost.
+* Fix: Corrected fatal error `Call to undefined function bp_members_get_user_url()` by using `bp_core_get_user_domain()`.
+* Fix: Corrected button styling for BuddyBoss theme.
+* Fix: Corrected strict comparison issue in `bprpa_is_activity_strem()` preventing button from showing.
+
 = 1.3.0 =
-* Changed plguin name to Re-post Activity for BuddyPress.
-* Improve code as per latest BuddyPress
+* Changed plugin name to Re-post Activity for BuddyPress.
+* Improve code as per latest BuddyPress.
+
 = 1.2.0 =
 * BuddyBoss Compatibility.
+
 = 1.1.2 =
 * Minor Bug Fixes.
+
 = 1.1.1 =
 * Bug Fixes.
+
 = 1.1.0 =
 * Added identifier for Reposted Activity.
 * Bug Fixes.
+
 = 1.0.0 =
 * Initial release.
